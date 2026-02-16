@@ -1,9 +1,12 @@
 body {
+    display: flex;
     margin: 0;
     padding: 50px;
     background-color: #f0f2f5;
     min-height: 100vh;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    justify-content: center;
+    align-items: center;
 }
 
 .card {
@@ -12,6 +15,7 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 300px;
+    text-align: center;
 }
 
 #title {
@@ -20,4 +24,36 @@ body {
     color: #333;
     text-align: center;
     font-weight: 600;
+}
+
+#login {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+#reg {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+#reg:hover{
+    background-color: #555;
+}
+
+#login:hover{
+    background-color: #555;
 }
