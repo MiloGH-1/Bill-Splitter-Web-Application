@@ -1,4 +1,6 @@
 from flask import Flask, render_template
+from routes.user import user_bp
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -9,3 +11,4 @@ def loginReg():
 def dashboard():
     return render_template("dashboard.html")
 
+app.register_blueprint(user_bp)
