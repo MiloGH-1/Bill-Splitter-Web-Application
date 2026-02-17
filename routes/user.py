@@ -14,6 +14,14 @@ def dashboard():
 def login():
     return render_template("login.html")
 
+@user_bp.route('/register')
+def reg():
+    return render_template("register.html")
+
 @user_bp.route('/go_login', methods = ["POST"])
 def go_login():
     return redirect(url_for("user.login"))
+
+@user_bp.route('/go_reg', methods = ["POST"])
+def go_reg():
+    return redirect(url_for("user.reg"))
