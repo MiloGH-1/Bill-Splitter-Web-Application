@@ -1,11 +1,14 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session
 
+
 auth_bp = Blueprint("auth", __name__, url_prefix="/")
+
+
 
 @auth_bp.route("/login", methods = ["POST", "GET"])
 def login():
     if request.method == "POST":
-        username = request.form.get("nm")
+        username = request.form.get("nm") 
         password = request.form.get("pwd")
         session["user"] = username
         return redirect(url_for("user.dashboard"))
