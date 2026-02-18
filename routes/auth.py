@@ -20,6 +20,7 @@ def reg():
     if request.method == "POST":
         username = request.form.get("nm")
         password = request.form.get("pwd")
+        email = request.form.get("email")
         return render_template("login.html")
 
     return render_template("register.html")
