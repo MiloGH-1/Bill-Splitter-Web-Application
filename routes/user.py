@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, session
 
 user_bp = Blueprint('user', __name__, url_prefix='/')
 
@@ -8,7 +8,10 @@ def loginReg():
 
 @user_bp.route('/dashboard')
 def dashboard():
-    return render_template("dashboard.html")
+    if "user" in session:
+        return render_template("dashboard.html")
+    else:
+        return redirect(url_for("auth.login"))
 
 @user_bp.route('/go_login', methods = ["POST"])
 def go_login():
