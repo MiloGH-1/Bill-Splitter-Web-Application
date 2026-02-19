@@ -64,3 +64,28 @@ body {
 #add:hover {
     background-color: #555;
 }
+
+.nav_bar {
+  background-color: #868686;
+  overflow: hidden;
+}
+
+.nav_bar a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.nav_bar a:hover {
+  background-color: #dddddd;
+  color: black;
+}
+
+.nav_bar a.active {
+  background-color: #000000;
+  color: white;
+}
