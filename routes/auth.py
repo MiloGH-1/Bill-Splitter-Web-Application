@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for, request, session
+from flask import Blueprint, render_template, redirect, url_for, request, session, flash
+from routes.models import users
+from routes.extensions import db
 
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/")
@@ -24,6 +26,16 @@ def reg():
         username = request.form.get("nm")
         password = request.form.get("pwd")
         email = request.form.get("email")
+
+        found = users.query.filter_by(email = email).first()
+        if found:
+            flash("Email already takein use")
+            return redirect(url_for("auth.login"))
+
+        else:
+            usr = users(username, email, password)
+            db.session.add(usr)
+            db.session.commit()
         return render_template("login.html")
 
     return render_template("register.html")
