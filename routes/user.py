@@ -13,6 +13,12 @@ def dashboard():
     else:
         return redirect(url_for("auth.login"))
 
+
+@user_bp.route("/groups")
+def groups():
+    return render_template("groups.html") 
+
+
 @user_bp.route("/go_login", methods = ["POST"])
 def go_login():
     return redirect(url_for("auth.login"))
