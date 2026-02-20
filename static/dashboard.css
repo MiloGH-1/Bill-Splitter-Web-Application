@@ -66,26 +66,37 @@ body {
 }
 
 .nav_bar {
-  background-color: #868686;
+  display: flex;
+  background-color: white;
   overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 35px;
+  padding: 10px;
 }
 
 .nav_bar a {
   float: left;
-  display: block;
-  color: #f2f2f2;
+  display: flex;
+  color: #555353;
   text-align: center;
-  padding: 14px 16px;
+  padding: 14px 20px;
   text-decoration: none;
   font-size: 18px;
+  border-radius: 8px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.nav_bar a:last-child {
+    margin-left: auto;
 }
 
 .nav_bar a:hover {
-  background-color: #dddddd;
+  background-color: #bdbaba;
   color: black;
 }
 
 .nav_bar a.active {
-  background-color: #000000;
+  background-color: #2c2b2b; 
   color: white;
 }
