@@ -10,3 +10,15 @@ class users(db.Model):
         self.username=username
         self.email=email
         self.password=password
+
+
+class bills(db.Model):
+    id = db.Column("billID", db.Integer, primary_key = True)
+    amount = db.Column("amount", db.Float, nullable=False)
+    paid = db.Column("paid", db.Float, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.userID'), nullable=False)
+
+    def __init__(self, amount, user_id):
+        self.user_id = user_id
+        self.paid = 0
+        self.amount = amount
