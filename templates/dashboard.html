@@ -33,7 +33,7 @@
         <div class = "add_modal">
             <div class = "add_content">
                 <span class="close">&times;</span>
-                <form>
+                <form action="{{ url_for('bills.addBill') }}" method="POST">
                     <label for = "recipient">Recipient:</label>
                     <input type = "text" id = "recipient" name = "recipient_user" placeholder="Enter Username" required>
                     

@@ -18,6 +18,7 @@ def login():
         found = users.query.filter_by(email=email).first()
         if found and check_password_hash(found.password, password):
                 session["user"] = email
+                session["user_id"] = found.id
                 return redirect(url_for("user.dashboard"))
         else:   
                 
