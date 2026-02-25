@@ -15,8 +15,8 @@ def dashboard():
 
 
 @user_bp.route("/history")
-def groups():
-    return render_template("groups.html") 
+def history():
+    return render_template("history.html") 
 
 
 @user_bp.route("/go_login", methods = ["POST"])

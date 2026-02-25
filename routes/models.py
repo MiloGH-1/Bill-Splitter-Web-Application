@@ -6,6 +6,9 @@ class users(db.Model):
     email = db.Column("email", db.String(100), nullable = False)
     password = db.Column("password", db.String(255), nullable = False)
 
+    bills_sent = db.relationship('bills', foreign_keys='bills.user_id', backref='sender', lazy=True)
+    bills_received = db.relationship('bills', foreign_keys='bills.recipient_id', backref='recipient', lazy=True)
+
     def __init__(self, username, email, password):
         self.username=username
         self.email=email
@@ -16,14 +19,15 @@ class bills(db.Model):
     id = db.Column("billID", db.Integer, primary_key = True)
     amount = db.Column("amount", db.Float, nullable=False)
     paid = db.Column("paid", db.Float, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.userID'), nullable=False)
-    group_id = db.Column(db.Integer, db.ForeignKey('groups.groupID'), nullable=False)
 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.userID'), nullable=False) #Secondary key
+    recipient_id = db.Column(db.Integer, db.ForeignKey('users.userID'), nullable=False) #Secondary key
 
-    def __init__(self, amount, user_id, group_id):
+    def __init__(self, amount, user_id, recipient_id):
         self.user_id = user_id
         self.paid = 0
         self.amount = amount
+        self.recipient_id = recipient_id
 
 
 
