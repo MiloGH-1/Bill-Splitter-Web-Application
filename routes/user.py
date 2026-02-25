@@ -14,7 +14,7 @@ def dashboard():
         return redirect(url_for("auth.login"))
 
 
-@user_bp.route("/groups")
+@user_bp.route("/history")
 def groups():
     return render_template("groups.html") 
 

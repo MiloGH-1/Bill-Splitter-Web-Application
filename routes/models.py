@@ -24,12 +24,7 @@ class bills(db.Model):
         self.user_id = user_id
         self.paid = 0
         self.amount = amount
-        self.group_id = group_id
 
-class groups(db.Model):
-    id = db.Column("groupID", db.Integer, primary_key = True)
 
-    def __init__(self):
-        
 
-group_fixer = db.Table('groupF', db.Column('user_id', db.Integer, db.ForeignKey('users.userID')), db.Column('group_id', db.Integer, db.ForeignKey('groups.groupID')))
+
