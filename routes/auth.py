@@ -47,9 +47,9 @@ def reg():
             usr = users(username, email, hashed_password)
             db.session.add(usr)
             db.session.commit()
-        return render_template("login.html")
+        return redirect(url_for("auth.login"))
 
-    return render_template("register.html")
+    return redirect(url_for("auth.register"))
 
 
 @auth_bp.route("/logout")
