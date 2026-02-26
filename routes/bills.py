@@ -14,12 +14,14 @@ def addBill():
 
     username = request.form.get("recipient_user")
     amount = request.form.get("amount")
+    billTitle = request.form.get("name")
+
     recipient = users.query.filter_by(username=username).first()
 
     if not recipient or recipient.id == user_id:   
         return redirect(url_for("user.dashboard"))
 
-    new_bill = bills(amount=amount, user_id=user_id, recipient_id=recipient.id)
+    new_bill = bills(amount=amount, billTitle=billTitle, user_id=user_id, recipient_id=recipient.id)
 
     db.session.add(new_bill)
     db.session.commit()

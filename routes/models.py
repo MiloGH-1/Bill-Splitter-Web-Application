@@ -24,7 +24,7 @@ class bills(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.userID'), nullable=False) #Secondary key
     recipient_id = db.Column(db.Integer, db.ForeignKey('users.userID'), nullable=False) #Secondary key
 
-    def __init__(self, amount, user_id, recipient_id, name):
+    def __init__(self, amount, name, user_id, recipient_id):
         self.user_id = user_id
         self.paid = 0
         self.amount = amount

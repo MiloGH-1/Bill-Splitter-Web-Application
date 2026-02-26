@@ -49,7 +49,7 @@ def reg():
             db.session.commit()
         return redirect(url_for("auth.login"))
 
-    return redirect(url_for("auth.register"))
+    return render_template("register.html")
 
 
 @auth_bp.route("/logout")
