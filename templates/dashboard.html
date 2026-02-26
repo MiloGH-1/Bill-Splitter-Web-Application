@@ -15,18 +15,11 @@
         <div class="card">
             <h2 id="title">Sent Bills</h2>
                 <ul id="billList">
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
+                    {% for x in sent %}
+                        <li>{{x.name }} - £{{x.amount}}</li>
+                    {% else %}
+                        <li>No bills sent yet</li>
+                    {% endfor %}
                 </ul>
             <button id="add">Add bill</button>
         </div>
@@ -34,18 +27,12 @@
         <div class="card2">
             <h2 id="title">My Bills</h2>
                 <ul id="billList">
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
-                    <li>Test</li>
+                    {% for x in received %}
+                        <li>{{x.name }} - £{{x.amount}}</li>
+                    {% else %}
+                        <li>No bills received yet</li>
+                    {% endfor %}
+                </ul>
                 </ul>
             <button id="pay">Pay bill</button>
         </div>

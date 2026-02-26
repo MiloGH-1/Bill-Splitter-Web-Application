@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, session
+from routes.models import users, bills
 
 user_bp = Blueprint("user", __name__, url_prefix="/")
 
@@ -9,7 +10,10 @@ def loginReg():
 @user_bp.route("/dashboard")
 def dashboard():
     if "user" in session:
-        return render_template("dashboard.html")
+        user_logged_in = session["user_id"]
+        sent_bills = bills.query.filter_by(user_id = user_logged_in).all()
+        received_bills = bills.query.filter_by(recipient_id = user_logged_in).all()
+        return render_template("dashboard.html", sent=sent_bills, received=received_bills)
     else:
         return redirect(url_for("auth.login"))
 

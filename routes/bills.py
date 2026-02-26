@@ -21,7 +21,7 @@ def addBill():
     if not recipient or recipient.id == user_id:   
         return redirect(url_for("user.dashboard"))
 
-    new_bill = bills(amount=amount, billTitle=billTitle, user_id=user_id, recipient_id=recipient.id)
+    new_bill = bills(amount=amount, name=billTitle, user_id=user_id, recipient_id=recipient.id)
 
     db.session.add(new_bill)
     db.session.commit()
