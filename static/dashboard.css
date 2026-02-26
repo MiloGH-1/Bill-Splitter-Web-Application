@@ -14,6 +14,14 @@ body {
     width: 300px;
 }
 
+.card2{
+    background-color: #fcfdfd;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(12, 14, 18, 0.08);
+    width: 300px;
+}
+
 #title {
     margin: 0 0 20px 0;
     font-size: 24px;
@@ -62,6 +70,22 @@ body {
 }
 
 #add:hover {
+    background-color: #494d54;
+}
+
+#pay {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background-color: #2e3136;
+    color: #fcfdfd;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+#pay:hover {
     background-color: #494d54;
 }
 
