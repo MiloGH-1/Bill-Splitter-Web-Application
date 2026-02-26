@@ -19,15 +19,17 @@ class bills(db.Model):
     id = db.Column("billID", db.Integer, primary_key = True)
     amount = db.Column("amount", db.Float, nullable=False)
     paid = db.Column("paid", db.Float, nullable=False)
+    name = db.Column("name", db.String, nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.userID'), nullable=False) #Secondary key
     recipient_id = db.Column(db.Integer, db.ForeignKey('users.userID'), nullable=False) #Secondary key
 
-    def __init__(self, amount, user_id, recipient_id):
+    def __init__(self, amount, user_id, recipient_id, name):
         self.user_id = user_id
         self.paid = 0
         self.amount = amount
         self.recipient_id = recipient_id
+        self.name = name
 
 
 
