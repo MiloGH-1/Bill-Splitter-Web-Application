@@ -8,7 +8,7 @@ from routes.bills import bills_bp
 
 app = Flask(__name__)
 app.secret_key = "secretkey"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.sqlite3"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.sqlite3"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)

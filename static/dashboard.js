@@ -15,3 +15,17 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+
+document.getElementById("recipient").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); 
+            
+            let name = this.value.trim();
+            
+            if (name !== "") {
+                document.getElementById("names_added").innerHTML += name + "   ";
+                document.getElementById("hidden_data").innerHTML += '<input type="hidden" name="recipients_list" value="${name}">';
+                this.value = "";
+            }
+        }
+    });

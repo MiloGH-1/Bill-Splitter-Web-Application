@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, session, request
 from routes.extensions import db
-from routes.models import bills, users
+from routes.models import bills, users, payments
 
 bills_bp = Blueprint("bills", __name__, url_prefix="/")
 
@@ -12,26 +12,33 @@ def addBill():
         print("test")
         return redirect(url_for("auth.login"))
 
-    username = request.form.get("recipient_user")
+    usernames = request.form.getlist("recipientList")
     amount = request.form.get("amount")
     billTitle = request.form.get("name")
 
-    bill_image = request.form.get("bill_image")
+    bill_image = request.files.get("bill_image")
     image=None
     type=None
 
     if bill_image and bill_image.filename != "":
-        image=image.read()
-        type=image.mimetype
+        image=bill_image.read()
+        type=bill_image.mimetype
 
-    recipient = users.query.filter_by(username=username).first()
+    recipients = users.query.filter(users.username.in_(usernames)).all()
 
-    if not recipient or recipient.id == user_id:   
+    if not recipients:
         return redirect(url_for("user.dashboard"))
 
-    new_bill = bills(amount=amount, name=billTitle, user_id=user_id, recipient_id=recipient.id, image=None, type=None)
-
+    new_bill = bills(amount=amount, name=billTitle, user_id=user_id, image=image, type=type)
     db.session.add(new_bill)
+
+    amount_pp = amount / (len(usernames)+1)
+
+    for x in recipients:
+        payment = payments(bill_id = new_bill.id, user_id = x.id, amount_owed = amount_pp)
+        db.session.add(payment)
+
+    
     db.session.commit()
 
     return redirect(url_for("user.dashboard"))
