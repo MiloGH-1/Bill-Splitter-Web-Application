@@ -6,7 +6,6 @@ class users(db.Model):
     email = db.Column("email", db.String(100), nullable = False)
     password = db.Column("password", db.String(255), nullable = False)
 
-    bills_sent = db.relationship('bills', foreign_keys='bills.user_id', backref='sender', lazy=True)
   
 
     def __init__(self, username, email, password):
@@ -38,12 +37,14 @@ class payments(db.Model):
 
     bill_id = db.Column(db.Integer, db.ForeignKey('bills.billID'), nullable=False) #Secondary key
     user_id = db.Column(db.Integer, db.ForeignKey('users.userID'), nullable=False) #Secondary key
+    name = db.Column(db.String, db.ForeignKey('bills.name'), nullable=False) #Secondary key
 
     amount_owed = db.Column(db.Float, nullable = False)
     paid = db.Column(db.Boolean, nullable = False)
 
-    def __init__(self, bill_id, user_id, amount_owed):
+    def __init__(self, bill_id, user_id, amount_owed, name):
         self.bill_id = bill_id
         self.user_id = user_id
+        self.name = name
         self.paid = False
         self.amount_owed = amount_owed

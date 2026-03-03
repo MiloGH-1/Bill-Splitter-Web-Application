@@ -36,7 +36,7 @@ def addBill():
     amount_pp = amount / (len(usernames)+1)
 
     for x in recipients:
-        payment = payments(bill_id = new_bill.id, user_id = x.id, amount_owed = amount_pp)
+        payment = payments(bill_id = new_bill.id, user_id = x.id, amount_owed = amount_pp, name=billTitle)
         db.session.add(payment)
 
     
