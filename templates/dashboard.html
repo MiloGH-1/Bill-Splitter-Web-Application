@@ -26,14 +26,13 @@
 
         <div class="card2">
             <h2 id="title">My Bills</h2>
-                <ul id="billList"><!--
+                <ul id="billList">
                     {% for x in received %}
-                        <li>{{x.name }} - £{{x.amount}}</li>
+                        <li>{{x.name }} - £{{x.amount_owed}}</li>
                     {% else %}
                         <li>No bills received yet</li>
                     {% endfor %}
                 </ul>
-            -->
             <button id="pay">Pay bill</button>
         </div>
         </div>
@@ -41,13 +40,13 @@
         <div class = "add_modal">
             <div class = "add_content">
                 <span class="close">&times;</span>
-                <form action="{{ url_for('bills.addBill') }}" method="POST" enctype="multipart/form-data">
+                <form id = "bill" action="{{ url_for('bills.addBill') }}" method="POST" enctype="multipart/form-data">
                     <label for = "name">Title:</label>
                     <input type = "text" id = "name" name = "name" placeholder="Bill Title" required>
 
 
                     <label for = "recipient">Recipient:</label>
-                    <input type = "text" id = "recipient" name = "recipient_user" placeholder="Enter Username" required>
+                    <input type = "text" id = "recipient" name = "recipient_user" placeholder="Enter Username">
                     
                     <div id="names_added"></div>
 

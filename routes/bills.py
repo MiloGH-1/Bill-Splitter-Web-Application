@@ -13,7 +13,7 @@ def addBill():
         return redirect(url_for("auth.login"))
 
     usernames = request.form.getlist("recipientList")
-    amount = request.form.get("amount")
+    amount = float(request.form.get("amount"))
     billTitle = request.form.get("name")
 
     bill_image = request.files.get("bill_image")
@@ -31,6 +31,7 @@ def addBill():
 
     new_bill = bills(amount=amount, name=billTitle, user_id=user_id, image=image, type=type)
     db.session.add(new_bill)
+    db.session.flush()
 
     amount_pp = amount / (len(usernames)+1)
 

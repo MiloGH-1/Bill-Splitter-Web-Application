@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, session
-from routes.models import users, bills
+from routes.models import users, bills, payments
 
 user_bp = Blueprint("user", __name__, url_prefix="/")
 
@@ -12,10 +12,10 @@ def dashboard():
     if "user" in session:
         user_logged_in = session["user_id"]
         sent_bills = bills.query.filter_by(user_id = user_logged_in).all()
+        received_bills = payments.query.filter_by(user_id = user_logged_in).all()
 
 
-
-        return render_template("dashboard.html", sent=sent_bills)
+        return render_template("dashboard.html", sent=sent_bills, received = received_bills)
     else:
         return redirect(url_for("auth.login"))
 

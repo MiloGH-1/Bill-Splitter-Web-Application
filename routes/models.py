@@ -25,15 +25,13 @@ class bills(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.userID'), nullable=False) #Secondary key
 
-    def __init__(self, amount, name, user_id, recipient_id, image=None, type=None):
+    def __init__(self, amount, name, user_id, image=None, type=None):
         self.user_id = user_id
         self.paid = 0
-        self.amount = amount
-        self.recipient_id = recipient_id
         self.name = name
         self.image = image
         self.type = type
-
+        self.amount = amount
 
 class payments(db.Model):
     id = db.Column("paymentID", db.Integer, primary_key=True)

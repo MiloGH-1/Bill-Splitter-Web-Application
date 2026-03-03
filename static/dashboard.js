@@ -24,8 +24,17 @@ document.getElementById("recipient").addEventListener("keydown", function(event)
             
             if (name !== "") {
                 document.getElementById("names_added").innerHTML += name + "   ";
-                document.getElementById("hidden_data").innerHTML += '<input type="hidden" name="recipients_list" value="${name}">';
+                document.getElementById("hidden_data").innerHTML += `<input type="hidden" name="recipientList" value="${name}">`;
                 this.value = "";
             }
         }
     });
+
+document.querySelector("#bill").addEventListener('submit', function(event) {
+    let hiddenDataContainer = document.getElementById("hidden_data");
+    
+    if (hiddenDataContainer.children.length === 0) {
+        event.preventDefault(); 
+        alert("Add atleast one recipient");
+    }
+});
