@@ -12,16 +12,19 @@
         <a href="{{url_for('auth.logout')}}">Logout</a>
         </div>
 
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul class=flashes>
-                {% for message in messages %}
-                <li>{{ message }}</li>
+                {% for category, message in messages %}
+                <li id="{{category}}" onclick="this.remove()" style="cursor: pointer;">{{ message }} 
+                    <span style="float: right; font-weight: bold;">&times;</span>
+                </li>
                 {% endfor %}
                 </ul>
               {% endif %}
             {% endwith %}
         {% block body %}{% endblock %}
+        
         <div class = "LISTS">
         <div class="card">
             <h2 id="title">Sent Bills</h2>

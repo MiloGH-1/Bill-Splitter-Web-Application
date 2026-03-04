@@ -5,11 +5,13 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='loginReg.css') }}">
     </head>
     <body>
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul class=flashes>
-                {% for message in messages %}
-                <li>{{ message }}</li>
+                {% for category, message in messages %}
+                <li id="{{category}}" onclick="this.remove()" style="cursor: pointer;">{{ message }} 
+                    <span style="float: right; font-weight: bold;">&times;</span>
+                </li>
                 {% endfor %}
                 </ul>
               {% endif %}

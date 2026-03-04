@@ -20,10 +20,10 @@ def login():
                 session["user"] = email
                 session["user_id"] = found.id
                 
-                flash("Sucessfully logged in! Hello " + found.username)
+                flash("Sucessfully logged in! Hello " + found.username, "green")
                 return redirect(url_for("user.dashboard"))
         else:   
-                
+                flash("Incorrect Details", "red")
                 return render_template("login.html")
     
     else:
@@ -49,14 +49,14 @@ def reg():
         
         
         elif foundUser:
-            flash("Username already in use!")
+            flash("Username already in use!", "red")
             return redirect(url_for("auth.reg"))
 
         else:
             usr = users(username, email, hashed_password)
             db.session.add(usr)
             db.session.commit()
-            flash("Account Created!")
+            flash("Account Created!", "green")
         return redirect(url_for("auth.login"))
 
     return render_template("register.html")
