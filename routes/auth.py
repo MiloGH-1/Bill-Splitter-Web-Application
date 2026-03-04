@@ -20,6 +20,7 @@ def login():
                 session["user"] = email
                 session["user_id"] = found.id
                 
+                flash("Sucessfully logged in! Hello " + found.username)
                 return redirect(url_for("user.dashboard"))
         else:   
                 
@@ -40,14 +41,22 @@ def reg():
 
         hashed_password = generate_password_hash(password)
 
-        found = users.query.filter_by(email = email).first()
-        if found:
-            return redirect(url_for("auth.login"))
+        foundEmail = users.query.filter_by(email = email).first()
+        foundUser = users.query.filter_by(username = username).first()
+        if foundEmail:
+            flash("Email already in use!")
+            return redirect(url_for("auth.reg"))
+        
+        
+        elif foundUser:
+            flash("Username already in use!")
+            return redirect(url_for("auth.reg"))
 
         else:
             usr = users(username, email, hashed_password)
             db.session.add(usr)
             db.session.commit()
+            flash("Account Created!")
         return redirect(url_for("auth.login"))
 
     return render_template("register.html")
