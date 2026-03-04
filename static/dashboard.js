@@ -23,17 +23,22 @@ document.getElementById("recipient").addEventListener("keydown", function(event)
             let name = this.value.trim();
             
             if (name !== "") {
-                document.getElementById("names_added").innerHTML += name + "   ";
-                document.getElementById("hidden_data").innerHTML += `<input type="hidden" name="recipientList" value="${name}">`;
+                let user = `<span>
+                                ${name} 
+                                <b onclick="this.parentElement.remove()">X</b>
+                                <input type="hidden" name="recipientList" value="${name}">
+                             </span>`;
+                document.getElementById("names_added").innerHTML += user + "   ";
+
                 this.value = "";
             }
         }
     });
 
 document.querySelector("#bill").addEventListener('submit', function(event) {
-    let hiddenDataContainer = document.getElementById("hidden_data");
+    let hiddenData = document.getElementById("hidden_data");
     
-    if (hiddenDataContainer.children.length === 0) {
+    if (hiddenData.children.length === 0) {
         event.preventDefault(); 
         alert("Add atleast one recipient");
     }
