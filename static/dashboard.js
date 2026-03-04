@@ -28,7 +28,7 @@ document.getElementById("recipient").addEventListener("keydown", function(event)
                                 <b onclick="this.parentElement.remove()">X</b>
                                 <input type="hidden" name="recipientList" value="${name}">
                              </span>`;
-                document.getElementById("names_added").innerHTML += user + "   ";
+                document.getElementById("names_added").innerHTML += user;
 
                 this.value = "";
             }
