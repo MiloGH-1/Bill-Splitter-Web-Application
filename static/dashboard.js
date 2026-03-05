@@ -22,12 +22,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal_bill_name = document.getElementById("modal_bill_name");
     const modal_bill_amount = document.getElementById("modal_bill_amount")
     const bill_list = document.querySelectorAll(".bill_click")
+    const modal_recipients = document.getElementById("modal_recipients")
 
     bill_list.forEach(item => {
         item.addEventListener("click", function() {
             const billId = this.getAttribute("data_bill_id");
 
-            fetch(`/get_bill/${billId}`)
+            fetch(`/get_bill/${billId-1}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.error){
@@ -37,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     modal_bill_name.textContent = data.name;
                     modal_bill_amount.textContent = data.amount;
+                    modal_recipients.textContent = data.recipients
 
                     bill_modal.style.display = "block"
                 })

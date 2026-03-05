@@ -48,10 +48,17 @@ def addBill():
 def get_bill(billID):
     bill = bills.query.filter_by(id=billID).first()
 
+    recipients = []
+    users = payments.query.filter_by(bill_id=billID).all()
+    for x in users:
+        recipients.append(x.user_id)
+
     if bill:
         return jsonify({
             'name': bill.name,
-            'amount': bill.amount
+            'amount': bill.amount,
+            'recipients': recipients
+
         })
     else:
         return jsonify({"error": "bill could not be found"}), 404
