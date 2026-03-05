@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, session, request
+from flask import Blueprint, render_template, redirect, url_for, session, request, jsonify
 from routes.extensions import db
 from routes.models import bills, users, payments
 
@@ -9,7 +9,6 @@ def addBill():
     user_id = session.get("user_id")
 
     if not user_id:
-        print("test")
         return redirect(url_for("auth.login"))
 
     usernames = request.form.getlist("recipientList")
@@ -44,3 +43,15 @@ def addBill():
 
     return redirect(url_for("user.dashboard"))
     
+
+@bills_bp.route("/get_bill/<int:billID>", methods=["GET"])
+def get_bill(billID):
+    bill = bills.query.filter_by(id=billID).first()
+
+    if bill:
+        return jsonify({
+            'name': bill.name,
+            'amount': bill.amount
+        })
+    else:
+        return jsonify({"error": "bill could not be found"}), 404
