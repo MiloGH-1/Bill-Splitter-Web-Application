@@ -48,10 +48,15 @@ def addBill():
 def get_bill(billID):
     bill = bills.query.filter_by(id=billID).first()
 
+    recipientsIDs = []
     recipients = []
-    users = payments.query.filter_by(bill_id=billID).all()
-    for x in users:
-        recipients.append(x.user_id)
+    usersIds = payments.query.filter_by(bill_id=billID).all()
+    for x in usersIds:
+        recipientsIDs.append(x.user_id)
+
+    for i in recipientsIDs:
+        user = users.query.filter_by(id=i).first()
+        recipients.append(user.username)
 
     if bill:
         return jsonify({
