@@ -30,6 +30,17 @@ document.addEventListener("DOMContentLoaded", () => {
     bill_list.forEach(item => {
         item.addEventListener("click", function() {
             const billId = this.getAttribute("data_bill_id");
+            const paymentId = this.getAttribute("data_payment_id");
+
+            const hidden_input = document.getElementById("hidden_payment_id");
+            const paymentForm = document.getElementById("bill_payment");
+
+            if (paymentId) {
+                paymentForm.style.display = "block";
+            if (hidden_input) hidden_input.value = paymentId;
+            } else {
+                paymentForm.style.display = "none"; 
+            }
 
             fetch(`/get_bill/${billId}`)
                 .then(response => response.json())
@@ -41,7 +52,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     modal_bill_name.textContent = data.name;
                     modal_bill_amount.textContent = data.amount;
-                    modal_recipients.textContent = data.recipients
+                    modal_recipients.innerHTML = ""; 
+
+                data.recipients.forEach(person => {
+                    const row = document.createElement("div");
+                    row.style.padding = "5px 0";
+                    
+                    const icon = person.paid ? "✅" : "❌❌";
+                    
+                    row.innerHTML = `<span>${icon} ${person.username}</span>`;
+                    modal_recipients.appendChild(row);
+                });
                     
                     if (data.image) {
                         modal_image.src = "data:image/jpeg;base64," + data.image;

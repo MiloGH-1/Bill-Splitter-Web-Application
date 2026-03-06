@@ -63,7 +63,7 @@ body {
     color: #0a0b0d;
 }
 
-#add {
+#add, #pay_bill {
     margin-top: 20px;
     width: 100%;
     padding: 12px;

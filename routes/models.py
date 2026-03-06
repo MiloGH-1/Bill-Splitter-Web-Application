@@ -21,6 +21,7 @@ class bills(db.Model):
 
     image = db.Column(db.LargeBinary, nullable=True) 
     type = db.Column(db.String(50), nullable=True)
+    paid = db.Column(db.Boolean, nullable = False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.userID'), nullable=False) #Secondary key
 
@@ -41,6 +42,9 @@ class payments(db.Model):
 
     amount_owed = db.Column(db.Float, nullable = False)
     paid = db.Column(db.Boolean, nullable = False)
+    
+    proof_of_payment = db.Column(db.LargeBinary, nullable=True) 
+    type = db.Column(db.String(50), nullable=True)
 
     def __init__(self, bill_id, user_id, amount_owed, name):
         self.bill_id = bill_id
@@ -48,3 +52,5 @@ class payments(db.Model):
         self.name = name
         self.paid = False
         self.amount_owed = amount_owed
+
+    

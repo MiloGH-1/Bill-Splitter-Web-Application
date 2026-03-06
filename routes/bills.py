@@ -64,12 +64,41 @@ def get_bill(billID):
         user = users.query.filter_by(id=i).first()
         recipients.append(user.username)
 
+    payment_records = payments.query.filter_by(bill_id=billID).all()
+    
+    recipient_paid = []
+    for x in payment_records:
+        user = users.query.get(x.user_id)
+        recipient_paid.append({
+            "username": user.username,
+            "paid": x.paid
+        })
+
     if bill:
         return jsonify({
             'name': bill.name,
             'amount': bill.amount,
-            'recipients': recipients,
+            'recipients': recipient_paid,
             'image': image_base
         })
     else:
         return jsonify({"error": "bill could not be found"}), 404
+    
+@bills_bp.route("/payBill", methods=["POST"])
+def payBill():
+    pay_image = request.files.get("pay_img")
+    payment_id = request.form.get("payment_id")
+
+    payment = payments.query.get(payment_id)
+
+    if payment and pay_image.filename != "":
+        file = pay_image.read()
+        payment.proof_of_payment=file
+        payment.type=pay_image.mimetype
+
+        payment.paid = True
+
+
+        db.session.commit()
+
+    return redirect(url_for("user.dashboard"))

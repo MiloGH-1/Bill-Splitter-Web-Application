@@ -12,7 +12,7 @@ def dashboard():
     if "user" in session:
         user_logged_in = session["user_id"]
         sent_bills = bills.query.filter_by(user_id = user_logged_in).all()
-        received_bills = payments.query.filter_by(user_id = user_logged_in).all()
+        received_bills = payments.query.filter(payments.user_id == user_logged_in, payments.paid != True).all()
 
         all_usernames = [u.username for u in users.query.all()]
 
