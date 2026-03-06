@@ -16,6 +16,18 @@ def dashboard():
 
         all_usernames = [u.username for u in users.query.all()]
 
+        all_sent_bills = bills.query.filter_by(user_id=user_logged_in).all()
+
+        sent_bills = []
+        for bill in all_sent_bills:
+            unpaid_exists = payments.query.filter_by(bill_id=bill.id, paid=False).first()
+            if unpaid_exists:
+                sent_bills.append(bill)
+
+
+
+        received_bills = payments.query.filter_by(user_id=user_logged_in, paid=False).all()
+
         return render_template("dashboard.html", sent=sent_bills, received = received_bills, USERNAMES = all_usernames)
     else:
         return redirect(url_for("auth.login"))
@@ -23,8 +35,20 @@ def dashboard():
 
 @user_bp.route("/history")
 def history():
-    return render_template("history.html") 
+    if "user" in session:
+        user_logged_in = session["user_id"]
+        all_sent_bills = bills.query.filter_by(user_id=user_logged_in).all()
+        paid_sent_bills = []
 
+        for bill in all_sent_bills:
+            unpaid_exists = payments.query.filter_by(bill_id=bill.id, paid=False).first()
+            if not unpaid_exists:
+                paid_sent_bills.append(bill)
+    
+        return render_template("history.html", paidbills = paid_sent_bills) 
+
+    else:
+        return redirect(url_for("auth.login"))
 
 @user_bp.route("/go_login", methods = ["POST"])
 def go_login():

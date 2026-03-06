@@ -68,10 +68,17 @@ def get_bill(billID):
     
     recipient_paid = []
     for x in payment_records:
+        
+        proof_base = None
+
+        if x.proof_of_payment:
+            proof_base = base64.b64encode(x.proof_of_payment).decode('utf-8')
+
         user = users.query.get(x.user_id)
         recipient_paid.append({
-            "username": user.username,
-            "paid": x.paid
+            'username': user.username,
+            'paid': x.paid,
+            'proof': proof_base
         })
 
     if bill:

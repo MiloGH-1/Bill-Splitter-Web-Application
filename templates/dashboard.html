@@ -90,17 +90,17 @@
                 <p><strong>Recipients:</strong>
                 <span id="modal_recipients"></span>
                 </p>
-                <p><strong>Proof of Bill:</strong>
+                <p><strong>Proof of Payment:</strong>
                 <img id="modal_image" src="" alt="Bill Image">
                 </p>
 
                 <form id="bill_payment" action = "{{ url_for('bills.payBill') }}" method="POST" enctype="multipart/form-data">
                     <label for="pay_img">Upload Proof of Payment:</label>
                     <input type="file" id = "pay_img" name="pay_img" accept="image/*" required>
-                    
-                    <input type="hidden" name="payment_id" id="hidden_payment_id" value="">
 
+                    <input type="hidden" name="payment_id" id="hidden_payment_id" value="">
                     <button id="pay_bill" type="submit">Pay Bill</button>
+                    
                 </form>
             </div>
         </div>

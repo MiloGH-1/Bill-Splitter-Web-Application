@@ -11,7 +11,41 @@
         <a href="{{url_for('auth.logout')}}">Logout</a>
         </div>
 
-
+        <div class = "LISTS">
+        <div class="card">
+            <h2 id="title">Paid Bills</h2>
+                <ul id="billList">
+                    {% for x in paidbills %}
+                        <li class = "bill_click" data_bill_id = "{{ x.id }}">{{x.name }} - £{{x.amount}}</li>
+                    {% else %}
+                        <li>No bills sent yet</li>
+                    {% endfor %}
+                </ul>
         </div>
+
+
+        <div id = "bill_modal">
+            <div class = "add_content">
+                <span class="close_bill">&times;</span>
+                <h3>Bill Details</h3>
+                <p><strong>Title:</strong>
+                <span id="modal_bill_name"></span>
+                </p>
+                <p><strong>Amount:</strong>
+                <span id="modal_bill_amount"></span>
+                </p>
+                <p><strong>Recipients:</strong>
+                <span id="modal_recipients"></span>
+                </p>
+                <p><strong>Proof of Payment:</strong>
+                </p>
+                <div id="modal_proofs"></div>
+
+                <form id="bill_payment" action = "{{ url_for('bills.payBill') }}" method="POST" enctype="multipart/form-data">
+
+                </form>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='history.js') }}"></script>
     </body>
 </html>
