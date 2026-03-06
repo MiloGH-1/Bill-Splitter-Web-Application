@@ -96,6 +96,7 @@
                 </p>
             </div>
         </div>
+        <div id="user_data" data-users='{{ USERNAMES|tojson|safe }}' style="display: none;"></div>
         <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
     </body>
 </html>

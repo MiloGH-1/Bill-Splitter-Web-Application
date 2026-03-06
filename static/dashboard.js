@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal_image = document.getElementById("modal_image")
 
 
+
     bill_list.forEach(item => {
         item.addEventListener("click", function() {
             const billId = this.getAttribute("data_bill_id");
@@ -105,6 +106,15 @@ document.getElementById("recipient").addEventListener("keydown", function(event)
                 error.style.display = "block";
                 return;
             }
+
+            const users = document.getElementById("user_data");
+            const valid_users = JSON.parse(users.getAttribute("data-users"));
+            if (!valid_users.includes(name)) {
+                error.textContent = "User does not exist in the database.";
+                error.style.display = "block";
+                return;
+            }
+
                 let user = `<span>
                                 ${name} 
                                 <b onclick="this.parentElement.remove()">X</b>

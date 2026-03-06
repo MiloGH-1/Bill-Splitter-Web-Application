@@ -14,8 +14,9 @@ def dashboard():
         sent_bills = bills.query.filter_by(user_id = user_logged_in).all()
         received_bills = payments.query.filter_by(user_id = user_logged_in).all()
 
+        all_usernames = [u.username for u in users.query.all()]
 
-        return render_template("dashboard.html", sent=sent_bills, received = received_bills)
+        return render_template("dashboard.html", sent=sent_bills, received = received_bills, USERNAMES = all_usernames)
     else:
         return redirect(url_for("auth.login"))
 
