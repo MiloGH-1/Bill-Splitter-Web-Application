@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal_bill_amount = document.getElementById("modal_bill_amount");
     const bill_list = document.querySelectorAll(".bill_click");
     const modal_recipients = document.getElementById("modal_recipients");
-    const modal_image = document.getElementById("modal_image"); 
+    const modal_proofs = document.getElementById("modal_proofs");
 
     bill_list.forEach(item => {
         item.addEventListener("click", function() {
@@ -27,19 +27,31 @@ document.addEventListener("DOMContentLoaded", () => {
                         data.recipients.forEach(person => {
                             const row = document.createElement("div");
                             row.style.padding = "5px 0";
-                            const icon = person.paid ? "✅" : "❌❌";
+                            const icon = person.paid ? "✅" : "❌";
                             row.innerHTML = `<span>${icon} ${person.username}</span>`;
                             modal_recipients.appendChild(row);
                         });
                     }
-                        
-                    if (modal_image) {
-                        if (data.image) {
-                            modal_image.src = "data:image/jpeg;base64," + data.image;
-                            modal_image.style.display = "block";
-                        } else {
-                            modal_image.style.display = "none"; 
-                            modal_image.src = ""; 
+
+                    if (modal_proofs) {
+                        modal_proofs.innerHTML = ""; 
+
+                        if (data.recipients && data.recipients.length > 0) {
+                            data.recipients.forEach(person => {
+                                if (person.proof) {
+                                    const proofContainer = document.createElement("div");
+                                    
+                                    const img = document.createElement("img");
+                                    img.src = "data:image/jpeg;base64," + person.proof;
+                                    
+                                    const nameLabel = document.createElement("p");
+                                    nameLabel.textContent = person.username;
+
+                                    proofContainer.appendChild(img);
+                                    proofContainer.appendChild(nameLabel);
+                                    modal_proofs.appendChild(proofContainer);
+                                }
+                            });
                         }
                     }
 
