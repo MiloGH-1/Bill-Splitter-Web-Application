@@ -23,12 +23,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal_bill_amount = document.getElementById("modal_bill_amount")
     const bill_list = document.querySelectorAll(".bill_click")
     const modal_recipients = document.getElementById("modal_recipients")
+    const modal_image = document.getElementById("modal_image")
+
 
     bill_list.forEach(item => {
         item.addEventListener("click", function() {
             const billId = this.getAttribute("data_bill_id");
 
-            fetch(`/get_bill/${billId-1}`)
+            fetch(`/get_bill/${billId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.error){
@@ -39,6 +41,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     modal_bill_name.textContent = data.name;
                     modal_bill_amount.textContent = data.amount;
                     modal_recipients.textContent = data.recipients
+                    
+                    if (data.image) {
+                        modal_image.src = "data:image/jpeg;base64," + data.image;
+                        modal_image.style.display = "block";
+
+                    } else {
+                        modal_image.style.display = "none"; 
+                        modal_image.src = ""; 
+                    }
 
                     bill_modal.style.display = "block"
                 })

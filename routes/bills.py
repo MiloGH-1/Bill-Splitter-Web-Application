@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, session, request, jsonify
 from routes.extensions import db
 from routes.models import bills, users, payments
+import base64
 
 bills_bp = Blueprint("bills", __name__, url_prefix="/")
 
@@ -51,6 +52,11 @@ def get_bill(billID):
     recipientsIDs = []
     recipients = []
     usersIds = payments.query.filter_by(bill_id=billID).all()
+    
+    image_base = None
+    if bill.image:
+        image_base = base64.b64encode(bill.image).decode('utf-8')
+
     for x in usersIds:
         recipientsIDs.append(x.user_id)
 
@@ -62,8 +68,8 @@ def get_bill(billID):
         return jsonify({
             'name': bill.name,
             'amount': bill.amount,
-            'recipients': recipients
-
+            'recipients': recipients,
+            'image': image_base
         })
     else:
         return jsonify({"error": "bill could not be found"}), 404

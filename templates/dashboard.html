@@ -30,7 +30,7 @@
             <h2 id="title">Sent Bills</h2>
                 <ul id="billList">
                     {% for x in sent %}
-                        <li>{{x.name }} - £{{x.amount}}</li>
+                        <li class = "bill_click" data_bill_id = "{{ x.id }}">{{x.name }} - £{{x.amount}}</li>
                     {% else %}
                         <li>No bills sent yet</li>
                     {% endfor %}
@@ -42,7 +42,7 @@
             <h2 id="title">My Bills</h2>
                 <ul id="billList">
                     {% for x in received %}
-                        <li class = "bill_click" data_bill_id = "{{ x.id }}">{{x.name }} - £{{x.amount_owed}}</li>
+                        <li class = "bill_click" data_bill_id = "{{ x.bill_id }}">{{x.name }} - £{{x.amount_owed}}</li>
                     {% else %}
                         <li>No bills received yet</li>
                     {% endfor %}
@@ -87,6 +87,9 @@
                 </p>
                 <p><strong>Recipients:</strong>
                 <span id="modal_recipients"></span>
+                </p>
+                <p><strong>Proof of Bill:</strong>
+                <img id="modal_image" src="" alt="Bill Image">
                 </p>
             </div>
         </div>
