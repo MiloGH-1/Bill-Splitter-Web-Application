@@ -74,23 +74,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 document.getElementById("recipient").addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault(); 
+    const error = document.getElementById("recipient_error");
+    error.style.display = "none";
+
+    if (event.key === "Enter") {
+        event.preventDefault(); 
+        
+        let name = this.value.trim();
+        
+        let current_logged = document.getElementById("current_logged_user").value.trim()
+        
+    
+        if (name !== "") {
+            if (name.length > 20) {
+                error.textContent = "Usernames cannot be longer than 20 characters.";
+                error.style.display = "block";
+                return;
+            }
+        
+            if (name === current_logged) {
+                error.textContent = "You cannot address a bill to yourself.";
+                error.style.display = "block";
+                return;
+            }
+
+            let already_in = Array.from(document.querySelectorAll("input[name='recipientList']")).map(input => input.value)
             
-            let name = this.value.trim();
-            
-            if (name !== "") {
+            if (already_in.includes(name)) {
+                error.textContent = "This user is already in the list.";
+                error.style.display = "block";
+                return;
+            }
                 let user = `<span>
                                 ${name} 
                                 <b onclick="this.parentElement.remove()">X</b>
                                 <input type="hidden" name="recipientList" value="${name}">
-                             </span>`;
+                            </span>`;
                 document.getElementById("names_added").innerHTML += user;
 
                 this.value = "";
-            }
         }
-    });
+    }
+});
 
 document.querySelector("#bill").addEventListener('submit', function(event) {
     let hiddenData = document.getElementById("names_added");

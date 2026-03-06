@@ -62,6 +62,9 @@
                     <label for = "recipient">Recipients:</label>
                     <input type = "text" id = "recipient" name = "recipient_user" placeholder="Enter Username">
                     
+                    <input type="hidden" id="current_logged_user" value="{{ session['user_name'] }}">
+
+                    <p id="recipient_error"></p>
                     <div id="names_added"></div>
 
                     <label for="amount">Amount (£):</label>

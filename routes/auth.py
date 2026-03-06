@@ -19,7 +19,8 @@ def login():
         if found and check_password_hash(found.password, password):
                 session["user"] = email
                 session["user_id"] = found.id
-                
+                session["user_name"] = found.username
+
                 flash("Sucessfully logged in! Hello " + found.username, "green")
                 return redirect(url_for("user.dashboard"))
         else:   
