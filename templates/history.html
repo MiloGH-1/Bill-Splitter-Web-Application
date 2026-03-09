@@ -13,15 +13,26 @@
 
         <div class = "LISTS">
         <div class="card">
-            <h2 id="title">Paid Bills + Proof</h2>
+            <h2 id="title">Bills Collected</h2>
                 <ul id="billList">
-                    {% for x in paidbills %}
+                    {% for x in collectedbills %}
                         <li class = "bill_click" data_bill_id = "{{ x.id }}">{{x.name }} - £{{x.amount}}</li>
                     {% else %}
                         <li>No bills have been fully paid yet</li>
                     {% endfor %}
                 </ul>
         </div>
+        <div class="card2">
+            <h2 id="title">Bills Paid</h2>
+                <ul id="billList">
+                    {% for x in paidbills %}
+                        <li class = "bill_click" data_bill_id = "{{ x.id }}">{{x.name }} - £{{x.amount}}</li>
+                    {% else %}
+                        <li>You have paid no bills yet</li>
+                    {% endfor %}
+                </ul>
+        </div>
+
 
 
         <div id = "bill_modal">
@@ -41,9 +52,6 @@
                 </p>
                 <div id="modal_proofs"></div>
 
-                <form id="bill_payment" action = "{{ url_for('bills.payBill') }}" method="POST" enctype="multipart/form-data">
-
-                </form>
             </div>
         </div>
         <script src="{{ url_for('static', filename='history.js') }}"></script>

@@ -40,12 +40,26 @@ def history():
         all_sent_bills = bills.query.filter_by(user_id=user_logged_in).all()
         paid_sent_bills = []
 
+        received_debts = payments.query.filter_by(user_id=user_logged_in).all()
+
+        paid_received_payments = []
+        original_bill = []
+        for payment in received_debts:
+            if payment.paid == True:
+                paid_received_payments.append(payment)
+            
+        for payment in paid_received_payments:
+            billID = payment.bill_id
+            bill = bills.query.filter_by(id = billID).first()
+            original_bill.append(bill)
+
+
         for bill in all_sent_bills:
             unpaid_exists = payments.query.filter_by(bill_id=bill.id, paid=False).first()
             if not unpaid_exists:
                 paid_sent_bills.append(bill)
     
-        return render_template("history.html", paidbills = paid_sent_bills) 
+        return render_template("history.html", collectedbills = paid_sent_bills, paidbills = original_bill) 
 
     else:
         return redirect(url_for("auth.login"))
