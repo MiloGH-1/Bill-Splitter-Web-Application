@@ -102,6 +102,11 @@
                     <button id="pay_bill" type="submit">Pay Bill</button>
                     
                 </form>
+
+                <form id="bill_delete" action="{{ url_for('bills.delete_bill') }}" method="POST">
+                    <input type="hidden" name="bill_id" id="hidden_delete_bill_id" value="">
+                    <button id="del_Bill" type="submit">Delete Bill</button>
+                </form>
             </div>
         </div>
 

@@ -23,6 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal_recipients = document.getElementById("modal_recipients")
     const modal_image = document.getElementById("modal_image")
 
+    const hidden_delete_input = document.getElementById("hidden_delete_bill_id");
+
+
+
+
     bill_list.forEach(item => {
         item.addEventListener("click", function() {
             const billId = this.getAttribute("data_bill_id");
@@ -38,6 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                     paymentForm.style.display = "none"; 
                 }
+            }
+
+            if (hidden_delete_input) {
+                hidden_delete_input.value = billId;
             }
 
             fetch(`/get_bill/${billId}`)

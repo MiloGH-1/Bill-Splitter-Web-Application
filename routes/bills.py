@@ -109,3 +109,24 @@ def payBill():
         db.session.commit()
 
     return redirect(url_for("user.dashboard"))
+
+@bills_bp.route("/delete_bill", methods = ["POST"])
+def delete_bill():
+    bill_id = request.form.get("bill_id")
+
+    if bill_id:
+        bill_to_delete = bills.query.get(bill_id)
+
+        if bill_to_delete:
+            fullyPaid = True
+            query = payments.query.filter_by(bill_id=bill_id).all()
+            for x in query:
+                if x.paid != True:
+                    fullyPaid = False
+
+            if fullyPaid:
+                payments.query.filter_by(bill_id=bill_id).delete()
+                db.session.delete(bill_to_delete)
+                db.session.commit()
+
+    return redirect(url_for("user.dashboard"))
