@@ -46,7 +46,7 @@
                 </ul>
             </div>
 
-            <div class="card2">
+            <div class="card">
                 <h2 id="title">All Bills</h2>
                 <ul id="billList">
                     {% for b in all_bills %}
@@ -64,6 +64,20 @@
                     {% endfor %}
                 </ul>
             </div>
+            <div class="card">
+                <h2 id="title">Login Attempts</h2>
+                <ul id="billList">
+                    {% for x in all_logins %}
+                        <li>
+                            <strong>{{ x.email_attempted }}</strong> 
+                            {{ "Success" if x.successful else "Fail" }}
+                            <small>{{ x.timestamp.strftime('%Y-%m-%d at %H:%M:%S') if x.timestamp else 'N/A' }}</small>
+                        </li>
+                    {% else %}
+                        <li>No login attempts recorded yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-    </body>
+        </body>
 </html>

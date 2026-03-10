@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session, flash
-from routes.models import users
+from routes.models import users, login_attempts
 from routes.extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -13,10 +13,13 @@ def login():
     if request.method == "POST":
         email = request.form.get("email") 
         password = request.form.get("pwd")
-        hashed_password = generate_password_hash(password)
 
         found = users.query.filter_by(email=email).first()
         if found and check_password_hash(found.password, password):
+                attempt = login_attempts(email_attempted=email, successful=True)
+                db.session.add(attempt)
+                db.session.commit()
+
                 session["user"] = email
                 session["user_id"] = found.id
                 session["user_name"] = found.username
@@ -25,6 +28,9 @@ def login():
                 flash("Sucessfully logged in! Hello " + found.username, "green")
                 return redirect(url_for("user.dashboard"))
         else:   
+                attempt = login_attempts(email_attempted=email, successful=False)
+                db.session.add(attempt)
+                db.session.commit()
                 flash("Incorrect Details", "red")
                 return render_template("login.html")
     

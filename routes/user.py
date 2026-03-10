@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, session
-from routes.models import users, bills, payments
+from routes.models import users, bills, payments, login_attempts
 
 user_bp = Blueprint("user", __name__, url_prefix="/")
 
@@ -80,8 +80,8 @@ def admin():
     if "user" not in session or not session.get("admin"):
         return ("user.dashboard")
     else:
-
+        all_logins = login_attempts.query.order_by(login_attempts.timestamp.desc()).limit(100).all()
         all_users = users.query.all()
         all_bills = bills.query.all()
 
-        return render_template("admin.html", all_users = all_users, all_bills = all_bills)
+        return render_template("admin.html", all_users = all_users, all_bills = all_bills, all_logins = all_logins)

@@ -62,4 +62,13 @@ class payments(db.Model):
         self.paid = False
         self.amount_owed = amount_owed
 
-    
+
+class login_attempts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email_attempted = db.Column(db.String(100), nullable=False)
+    successful = db.Column(db.Boolean, nullable=False, default=False)
+    timestamp = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
+    def __init__(self, email_attempted, successful):
+        self.email_attempted = email_attempted
+        self.successful = successful 
