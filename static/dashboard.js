@@ -22,9 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const bill_list = document.querySelectorAll(".bill_click")
     const modal_recipients = document.getElementById("modal_recipients")
     const modal_image = document.getElementById("modal_image")
-
     const hidden_delete_input = document.getElementById("hidden_delete_bill_id");
-
+    const modal_date = document.getElementById("modal_date")
 
 
 
@@ -35,6 +34,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const hidden_input = document.getElementById("hidden_payment_id");
             const paymentForm = document.getElementById("bill_payment");
+            const bill_delete_form = document.getElementById("bill_delete")
+
+           if (bill_delete_form) {
+                if (paymentId) {
+                    bill_delete_form.style.display = "none";
+                }
+            }
 
             if (paymentForm) {
                 if (paymentId) {
@@ -57,8 +63,22 @@ document.addEventListener("DOMContentLoaded", () => {
                         return;
                     }
                     
+                    if (modal_date) modal_date.textContent = data.date;
                     if (modal_bill_name) modal_bill_name.textContent = data.name;
                     if (modal_bill_amount) modal_bill_amount.textContent = data.amount;
+
+                    if (bill_delete_form && !paymentId) {
+                        let anyone_paid = false;
+                        if (data.recipients) {
+                            anyone_paid = data.recipients.some(person => person.paid === true);
+                        }
+                        
+                        if (anyone_paid) {
+                            bill_delete_form.style.display = "none";
+                        } else {
+                            bill_delete_form.style.display = "block";
+                        }
+                    }
                     
                     if (modal_recipients) {
                         modal_recipients.innerHTML = ""; 

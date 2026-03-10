@@ -52,7 +52,11 @@ def get_bill(billID):
     recipientsIDs = []
     recipients = []
     usersIds = payments.query.filter_by(bill_id=billID).all()
-    
+
+    date = ""
+    if bill.created_at:
+        date = bill.created_at.strftime("%B %d, %Y at %I:%M %p")
+
     image_base = None
     if bill.image:
         image_base = base64.b64encode(bill.image).decode('utf-8')
@@ -74,6 +78,9 @@ def get_bill(billID):
         if x.proof_of_payment:
             proof_base = base64.b64encode(x.proof_of_payment).decode('utf-8')
 
+
+        
+
         user = users.query.get(x.user_id)
         recipient_paid.append({
             'username': user.username,
@@ -86,7 +93,8 @@ def get_bill(billID):
             'name': bill.name,
             'amount': bill.amount,
             'recipients': recipient_paid,
-            'image': image_base
+            'image': image_base,
+            'date': date
         })
     else:
         return jsonify({"error": "bill could not be found"}), 404
@@ -96,7 +104,7 @@ def payBill():
     pay_image = request.files.get("pay_img")
     payment_id = request.form.get("payment_id")
 
-    payment = payments.query.get(payment_id)
+    payment = payments.query.filter_by(payment_id).all()
 
     if payment and pay_image.filename != "":
         file = pay_image.read()
@@ -118,13 +126,14 @@ def delete_bill():
         bill_to_delete = bills.query.get(bill_id)
 
         if bill_to_delete:
-            fullyPaid = True
+            no_payments = True
             query = payments.query.filter_by(bill_id=bill_id).all()
-            for x in query:
-                if x.paid != True:
-                    fullyPaid = False
 
-            if fullyPaid:
+            for x in query:
+                if x.paid == True:
+                    no_payments = False
+
+            if no_payments:
                 payments.query.filter_by(bill_id=bill_id).delete()
                 db.session.delete(bill_to_delete)
                 db.session.commit()

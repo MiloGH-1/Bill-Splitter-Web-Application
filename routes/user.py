@@ -5,7 +5,10 @@ user_bp = Blueprint("user", __name__, url_prefix="/")
 
 @user_bp.route("/")
 def loginReg():
-    return render_template("login-or-reg.html")
+    if "user" in session:
+        return redirect(url_for("user.dashboard"))
+    else:
+        return render_template("login-or-reg.html")
 
 @user_bp.route("/dashboard")
 def dashboard():

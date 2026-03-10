@@ -6,7 +6,8 @@ class users(db.Model):
     email = db.Column("email", db.String(100), nullable = False)
     password = db.Column("password", db.String(255), nullable = False)
 
-  
+    created_at = db.Column("created_at", db.DateTime(timezone=True), server_default=db.func.now())
+
 
     def __init__(self, username, email, password):
         self.username=username
@@ -21,9 +22,11 @@ class bills(db.Model):
 
     image = db.Column(db.LargeBinary, nullable=True) 
     type = db.Column(db.String(50), nullable=True)
-    paid = db.Column(db.Boolean, nullable = False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.userID'), nullable=False) #Secondary key
+
+    created_at = db.Column("created_at", db.DateTime(timezone=True), server_default=db.func.now())
+
 
     def __init__(self, amount, name, user_id, image=None, type=None):
         self.user_id = user_id
