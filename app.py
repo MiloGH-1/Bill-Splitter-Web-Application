@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from routes.user import user_bp
 from routes.auth import auth_bp
@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 app.secret_key = "secretkey"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.sqlite3"
+app.config["SQLALCHEMY_DATABASE_URI"] = "db:///database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['MAIL_SUPPRESS_SEND'] = True
 app.config['MAIL_DEBUG'] = True

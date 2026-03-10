@@ -6,40 +6,52 @@ from routes.emails import send_bill_email, paid_bill_email
 
 bills_bp = Blueprint("bills", __name__, url_prefix="/")
 
+
+#Method to add a bill to the database
 @bills_bp.route("/addBill", methods=["POST"])
 def addBill():
     user_id = session.get("user_id")
 
+    #Checks if a user is in the session
     if not user_id:
         return redirect(url_for("auth.login"))
 
+    #Obtains values from the form in the HTML
     usernames = request.form.getlist("recipientList")
     amount = float(request.form.get("amount"))
     billTitle = request.form.get("name")
-
     bill_image = request.files.get("bill_image")
     image=None
     type=None
 
+    #Checks if an image is present
     if bill_image and bill_image.filename != "":
+        #Assigns a type and data to the image so it can be stored as a BLOB
         image=bill_image.read()
         type=bill_image.mimetype
 
+    #Finds recipients by querying the user table and checking usernames
     recipients = users.query.filter(users.username.in_(usernames)).all()
 
     if not recipients:
         return redirect(url_for("user.dashboard"))
 
+    #Instantiates new bill using the class from 'models.py'
     new_bill = bills(amount=amount, name=billTitle, user_id=user_id, image=image, type=type)
+
+    #Adds to the db
     db.session.add(new_bill)
     db.session.flush()
 
+    #Finds the amount each user will need to pay
     amount_pp = amount / (len(usernames)+1)
 
+    #Loops through all the recipients and creates a new payment for each
     for x in recipients:
         payment = payments(bill_id = new_bill.id, user_id = x.id, amount_owed = amount_pp, name=billTitle)
         db.session.add(payment)
 
+        #Sends an email to each recipient of the payment
         if x.email:
             send_bill_email(x.email, billTitle, amount_pp)
 
@@ -49,6 +61,7 @@ def addBill():
     return redirect(url_for("user.dashboard"))
     
 
+#Method to obtain info about a bill from the database
 @bills_bp.route("/get_bill/<int:billID>", methods=["GET"])
 def get_bill(billID):
     bill = bills.query.filter_by(id=billID).first()
