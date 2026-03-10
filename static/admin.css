@@ -41,3 +41,107 @@ body {
   background-color: #2e3136; 
   color: #fcfdfd;
 }
+
+.LISTS{
+    display: flex;
+    gap: 75px;
+    justify-content: center;
+}
+
+.card {
+    background-color: #fcfdfd;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(12, 14, 18, 0.08);
+    width: 300px;
+}
+
+.card2{
+    background-color: #fcfdfd;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(12, 14, 18, 0.08);
+    width: 300px;
+}
+
+#title {
+    margin: 0 0 20px 0;
+    font-size: 24px;
+    color: #2e3136;
+    text-align: center;
+    font-weight: 600;
+}
+
+#billList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #dfe2e6;
+    border-radius: 6px;
+}
+
+#billList li {
+    padding: 12px 15px;
+    font-size: 16px;
+    color: #52565c;
+    border-bottom: 1px solid #edf0f4;
+    transition: background-color 0.2s;
+}
+
+#billList li:last-child {
+    border-bottom: none;
+}
+
+#billList li:hover {
+    background-color: #f8f9fb;
+    color: #0a0b0d;
+}
+
+button{
+    margin-top: 4px;
+    width: 40%;
+    padding: 4px;
+    background-color: #2e3136;
+    color: #fcfdfd;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    transition: background-color 0.2s;
+}
+
+.flashes {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%); 
+    z-index: 1;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.flashes li {
+    padding: 14px 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(12, 14, 18, 0.15);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.flashes li#green {
+    background-color: #e3fcef; 
+    color: #12630f;
+    border: 1px solid #badbcc;
+}
+
+.flashes li#red {
+    background-color: #fce8e8;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}

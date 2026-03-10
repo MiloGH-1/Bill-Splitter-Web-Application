@@ -1,20 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Dashboard</title>
+        <title>Admin Dashboard</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
     </head>
     <body>
         <div class="nav_bar">
-        <a href="{{url_for('user.dashboard')}}">Dashboard</a>
-        <a href="{{url_for('user.history')}}">History</a>
+            <a href="{{url_for('user.dashboard')}}">Dashboard</a>
+            <a href="{{url_for('user.history')}}">History</a>
 
-        {% if session.get('admin') %}
-            <a href="{{url_for('user.admin')}}" class = "active">Admin Dashboard</a>
-        {% endif %}
+            {% if session.get('admin') %}
+                 <a href="{{url_for('user.admin')}}" class = "active">Admin Dashboard</a>
+            {% endif %}
 
-        <a href="{{url_for('auth.logout')}}">Logout</a>
+            <a href="{{url_for('auth.logout')}}">Logout</a>
         </div>
 
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                {% for category, message in messages %}
+                    <li id="{{category}}" onclick="this.remove()" style="cursor: pointer;">{{ message }} 
+                        <span style="float: right; font-weight: bold;">&times;</span>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <div class="LISTS">
+            <div class="card">
+                <h2 id="title">All Users</h2>
+                <ul id="billList">
+                    {% for u in all_users %}
+                        <li>
+                            <strong>{{ u.username }}</strong> ({{ u.email }})
+                            <br><small>Joined: {{ u.created_at.strftime('%Y-%m-%d') if u.created_at else 'N/A' }}</small>
+
+                            <form action="{{ url_for('bills.account_delete') }}" method="POST">
+                                <input type="hidden" name="user_id" value="{{ u.id }}">
+                                <button id ="delete" type="submit">Delete</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card2">
+                <h2 id="title">All Bills</h2>
+                <ul id="billList">
+                    {% for b in all_bills %}
+                        <li>
+                            <strong>ID {{ b.id }}: {{ b.name }}</strong> - £{{ b.amount }}
+                            <br><small>Created by User ID: {{ b.user_id }}</small>
+
+                            <form action="{{ url_for('bills.admin_bill_delete') }}" method="POST">
+                                <input type="hidden" name="bill_id" value="{{ b.id }}">
+                                <button id ="delete" type="submit">Delete</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li>No bills in the system yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </body>
 </html>

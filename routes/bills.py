@@ -168,3 +168,50 @@ def delete_saved_bill():
         if bill or payment:
             db.session.commit()
     return redirect(url_for("user.history"))
+
+@bills_bp.route("/admin_bill_delete", methods = ["POST"])
+def admin_bill_delete():
+    if not session.get("admin"):
+        return redirect(url_for("user.dashboard"))
+    
+    else:
+        bill_id = request.form.get("bill_id")
+
+        if bill_id:
+            bill_to_delete = bills.query.get(bill_id)
+
+            if bill_to_delete:
+                payments.query.filter_by(bill_id=bill_id).delete()
+                db.session.delete(bill_to_delete)
+                db.session.commit()
+                flash("Bill deleted sucessfully from entire database", "green")
+    return redirect(url_for("user.admin"))
+
+@bills_bp.route("/account_delete", methods = ["POST"])
+def account_delete():
+    if not session.get("admin"):
+        return redirect(url_for("user.dashboard"))
+    
+    else:
+        user_id = request.form.get("user_id")
+
+        if user_id:
+            account_to_delete = users.query.get(user_id)
+
+            if account_to_delete and account_to_delete.username != "admin":
+                payments.query.filter_by(user_id=account_to_delete.id).delete()
+
+                user_bills = bills.query.filter_by(user_id=account_to_delete.id).all()
+                
+                for b in user_bills:
+                    payments.query.filter_by(bill_id=b.id).delete()
+
+                bills.query.filter_by(user_id=account_to_delete.id).delete()
+
+                db.session.delete(account_to_delete)
+                db.session.commit()
+                flash("Sucessfully deleted account forever, it is not recoverable", "green")
+            else:
+                flash("Cannot delete admin account", "red")
+
+    return redirect(url_for("user.admin"))

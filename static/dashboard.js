@@ -171,7 +171,7 @@ if (recipientInput) {
 
                 let user = `<span>
                                 ${name} 
-                                <b style="cursor:pointer;" onclick="this.parentElement.remove()">X</b>
+                                <b style="cursor:pointer;" onclick="this.parentElement.remove()">×</b>
                                 <input type="hidden" name="recipientList" value="${name}">
                             </span>`;
                 const names_added = document.getElementById("names_added");
