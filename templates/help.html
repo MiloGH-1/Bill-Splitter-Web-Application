@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Admin Dashboard</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    </head>
+    <body>
+        <div class="nav_bar">
+            <a href="{{url_for('user.dashboard')}}">Dashboard</a>
+            <a href="{{url_for('user.history')}}">History</a>
+            
+
+            {% if session.get('admin') %}
+                 <a href="{{url_for('user.admin')}}">Admin Dashboard</a>
+            {% endif %}
+            
+            <a href="{{url_for('user.help')}}" class = "active">Help</a>
+            <a href="{{url_for('auth.logout')}}">Logout</a>
+
+            
+        </div>
+
+        <p>Welcome, to the Bill Splitter App! Below are instructions to help navigate this webiste. if you need any further support 
+            or want to report a bug please contact: <strong>u5697255@live.warwick.ac.uk</strong>
+        </p>
+
+        <div id = "help_card">
+        <h3>How to create a bill for others to pay:</h3>
+        <li>Go to your dashboard and press <strong>Add Bill</strong></li>
+        <li>Fill in the details on the form and press submit</li>
+        <li>This bill will now be viewable by those that you sent it to and they will receive an email</li>
+
+        <h3>How to mark a bill as paid that has been sent to you:</h3>
+        <li>Click on the bill in the <strong>My Bills</strong> list which you have paid for</li>
+        <li>Submit proof of payment by submitting the image in the form</li>
+        <li>Submit the form by pressing the <strong>Pay Bill</strong> button</li>
+
+        <h3>What's in the history page?</h3>
+        <li>On the history page are old bils which you have sent to others that are now fully paid as well as bills which you yourself have paid</li>
+        <li>You can delete these off the page once you have acknowledged they are there to free up more space or keep them as a reminder</li>
+        <li>There is also a box which shows the amount of bills you have paid and the amount of bills that you have collected since the creation of your account</li>
+        </div>
+    </body>
+</html>

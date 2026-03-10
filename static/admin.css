@@ -28,7 +28,7 @@ body {
   transition: background-color 0.2s, color 0.2s;
 }
 
-.nav_bar a:last-child {
+.nav_bar a:nth-last-child(2) {
     margin-left: auto;
 }
 
@@ -46,23 +46,18 @@ body {
     display: flex;
     gap: 75px;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
-.card {
+.card, .card2 {
     background-color: #fcfdfd;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(12, 14, 18, 0.08);
-    width: 300px;
+    width: 100%; 
+    max-width: 300px;
 }
 
-.card2{
-    background-color: #fcfdfd;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(12, 14, 18, 0.08);
-    width: 300px;
-}
 
 #title {
     margin: 0 0 20px 0;

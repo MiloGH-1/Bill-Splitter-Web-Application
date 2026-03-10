@@ -61,8 +61,28 @@ def history():
             unpaid_exists = payments.query.filter_by(bill_id=bill.id, paid=False).first()
             if not unpaid_exists:
                 paid_sent_bills.append(bill)
-    
-        return render_template("history.html", collectedbills = paid_sent_bills, paidbills = original_bill) 
+
+        user_completed_payments = payments.query.filter_by(user_id = user_logged_in, paid = True).all()
+        total_out = 0
+        for x in user_completed_payments:
+            total_out += x.amount_owed
+
+
+        my_bills = bills.query.filter_by(user_id = user_logged_in).all()
+        bills_ids = []
+        for x in my_bills:
+            bills_ids.append(x.id)
+
+        total_in=0
+        if bills_ids:
+            collected = payments.query.filter(payments.bill_id.in_(bills_ids), payments.paid == True).all()
+            for x in collected:
+                total_in += x.amount_owed
+
+        return render_template("history.html", collectedbills = paid_sent_bills, 
+                               paidbills = original_bill, 
+                               total_out = total_out, 
+                               total_in = total_in) 
 
     else:
         return redirect(url_for("auth.login"))
@@ -85,3 +105,11 @@ def admin():
         all_bills = bills.query.all()
 
         return render_template("admin.html", all_users = all_users, all_bills = all_bills, all_logins = all_logins)
+    
+@user_bp.route("/help")
+def help():
+    if "user" not in session:
+        return redirect(url_for("auth.login"))
+    else:
+        return render_template("help.html")
+    
