@@ -78,9 +78,6 @@ def get_bill(billID):
         if x.proof_of_payment:
             proof_base = base64.b64encode(x.proof_of_payment).decode('utf-8')
 
-
-        
-
         user = users.query.get(x.user_id)
         recipient_paid.append({
             'username': user.username,
@@ -104,7 +101,7 @@ def payBill():
     pay_image = request.files.get("pay_img")
     payment_id = request.form.get("payment_id")
 
-    payment = payments.query.filter_by(payment_id).all()
+    payment = payments.query.filter_by(id=payment_id).first()
 
     if payment and pay_image.filename != "":
         file = pay_image.read()
@@ -139,3 +136,21 @@ def delete_bill():
                 db.session.commit()
 
     return redirect(url_for("user.dashboard"))
+
+@bills_bp.route("/delete_saved_bill", methods = ["POST"])
+def delete_saved_bill():
+    user_id = session.get("user_id")
+    bill_id = request.form.get("bill_id")
+
+    if bill_id:
+        bill = bills.query.filter_by(id=bill_id, user_id=user_id).first()
+        if bill:
+            bill.hidden_by_creator = True
+
+        payment = payments.query.filter_by(bill_id=bill_id, user_id=user_id).first()
+        if payment:
+            payment.hidden_by_payer = True
+
+        if bill or payment:
+            db.session.commit()
+    return redirect(url_for("user.history"))

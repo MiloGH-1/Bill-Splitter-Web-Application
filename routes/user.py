@@ -40,10 +40,10 @@ def dashboard():
 def history():
     if "user" in session:
         user_logged_in = session["user_id"]
-        all_sent_bills = bills.query.filter_by(user_id=user_logged_in).all()
+        all_sent_bills = bills.query.filter_by(user_id=user_logged_in, hidden_by_creator=False).all()
         paid_sent_bills = []
 
-        received_debts = payments.query.filter_by(user_id=user_logged_in).all()
+        received_debts = payments.query.filter_by(user_id=user_logged_in, hidden_by_payer=False).all()
 
         paid_received_payments = []
         original_bill = []

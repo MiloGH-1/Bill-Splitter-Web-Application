@@ -6,11 +6,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const bill_list = document.querySelectorAll(".bill_click");
     const modal_recipients = document.getElementById("modal_recipients");
     const modal_proofs = document.getElementById("modal_proofs");
+    const hidden_delete_bill_id = document.getElementById("hidden_delete_bill_id");
 
     bill_list.forEach(item => {
         item.addEventListener("click", function() {
             const billId = this.getAttribute("data_bill_id");
 
+            if (hidden_delete_bill_id) {
+                hidden_delete_bill_id.value = billId;
+            }
+            
             fetch(`/get_bill/${billId}`)
                 .then(response => response.json())
                 .then(data => {

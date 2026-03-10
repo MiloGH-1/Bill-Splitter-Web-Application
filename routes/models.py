@@ -27,6 +27,8 @@ class bills(db.Model):
 
     created_at = db.Column("created_at", db.DateTime(timezone=True), server_default=db.func.now())
 
+    hidden_by_creator = db.Column(db.Boolean, default=False)
+
 
     def __init__(self, amount, name, user_id, image=None, type=None):
         self.user_id = user_id
@@ -48,6 +50,8 @@ class payments(db.Model):
     
     proof_of_payment = db.Column(db.LargeBinary, nullable=True) 
     type = db.Column(db.String(50), nullable=True)
+
+    hidden_by_payer = db.Column(db.Boolean, default=False)
 
     def __init__(self, bill_id, user_id, amount_owed, name):
         self.bill_id = bill_id

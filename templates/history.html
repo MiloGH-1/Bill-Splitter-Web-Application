@@ -52,6 +52,11 @@
                 </p>
                 <div id="modal_proofs"></div>
 
+                <form id="bill_delete" action="{{ url_for('bills.delete_saved_bill') }}" method="POST">
+                    <input type="hidden" name="bill_id" id="hidden_delete_bill_id" value="">
+                    <button id="del_bill" type="submit">Delete Bill</button>
+                </form>
+
             </div>
         </div>
         <script src="{{ url_for('static', filename='history.js') }}"></script>
