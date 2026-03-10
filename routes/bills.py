@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, redirect, url_for, session, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, session, request, jsonify, flash
 from routes.extensions import db
 from routes.models import bills, users, payments
 import base64
+from routes.emails import send_bill_email, paid_bill_email
 
 bills_bp = Blueprint("bills", __name__, url_prefix="/")
 
@@ -38,6 +39,9 @@ def addBill():
     for x in recipients:
         payment = payments(bill_id = new_bill.id, user_id = x.id, amount_owed = amount_pp, name=billTitle)
         db.session.add(payment)
+
+        if x.email:
+            send_bill_email(x.email, billTitle, amount_pp)
 
     
     db.session.commit()
@@ -103,6 +107,8 @@ def payBill():
 
     payment = payments.query.filter_by(id=payment_id).first()
 
+    bill = bills.query.get(payment.bill_id)
+
     if payment and pay_image.filename != "":
         file = pay_image.read()
         payment.proof_of_payment=file
@@ -110,9 +116,15 @@ def payBill():
 
         payment.paid = True
 
+        if bill:
+            sender = users.query.get(bill.user_id)
+            payer = users.query.get(payment.user_id)
+            if sender and sender.email:
+                paid_bill_email(sender.email, bill.name, payer.username, payment.amount_owed)
 
         db.session.commit()
 
+    flash("Sucessfully paid bill!", "green")
     return redirect(url_for("user.dashboard"))
 
 @bills_bp.route("/delete_bill", methods = ["POST"])
@@ -134,6 +146,8 @@ def delete_bill():
                 payments.query.filter_by(bill_id=bill_id).delete()
                 db.session.delete(bill_to_delete)
                 db.session.commit()
+            else:
+                flash("Cannot delete bill if atleast one recipient has already paid!")
 
     return redirect(url_for("user.dashboard"))
 
