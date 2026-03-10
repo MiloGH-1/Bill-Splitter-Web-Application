@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Dashboard</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+    </head>
+    <body>
+        <div class="nav_bar">
+        <a href="{{url_for('user.dashboard')}}">Dashboard</a>
+        <a href="{{url_for('user.history')}}">History</a>
+
+        {% if session.get('admin') %}
+            <a href="{{url_for('user.admin')}}" class = "active">Admin Dashboard</a>
+        {% endif %}
+
+        <a href="{{url_for('auth.logout')}}">Logout</a>
+        </div>
+
+    </body>
+</html>

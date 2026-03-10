@@ -8,11 +8,13 @@ class users(db.Model):
 
     created_at = db.Column("created_at", db.DateTime(timezone=True), server_default=db.func.now())
 
+    admin = db.Column("admin", db.Boolean, default=False)
 
-    def __init__(self, username, email, password):
+    def __init__(self, username, email, password, admin = False):
         self.username=username
         self.email=email
         self.password=password
+        self.admin = admin
 
 
 class bills(db.Model):

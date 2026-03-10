@@ -20,6 +20,7 @@ def login():
                 session["user"] = email
                 session["user_id"] = found.id
                 session["user_name"] = found.username
+                session["admin"] = found.admin
 
                 flash("Sucessfully logged in! Hello " + found.username, "green")
                 return redirect(url_for("user.dashboard"))

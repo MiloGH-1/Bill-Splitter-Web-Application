@@ -5,6 +5,7 @@ from routes.auth import auth_bp
 from routes.extensions import db, mail
 from routes.models import users
 from routes.bills import bills_bp
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 app.secret_key = "secretkey"
@@ -22,19 +23,10 @@ app.register_blueprint(bills_bp)
 
 with app.app_context():
     db.create_all()
+    admin_user = users.query.filter_by(username="admin").first()
+    if not admin_user:
+        hashed_pwd = generate_password_hash("adminpassword")
+        new_admin = users(username="admin", email="admin@account.com", password=hashed_pwd, admin=True)
+        db.session.add(new_admin)
+        db.session.commit()
 
-from flask_mail import email_dispatched
-
-# This function catches the email right before it gets suppressed and prints it!
-def log_message(app, message):
-    print("\n" + "="*30)
-    print("📧 EMAIL INTERCEPTED (SUPPRESSED)")
-    print("="*30)
-    print(f"To:      {message.recipients}")
-    print(f"From:    {message.sender}")
-    print(f"Subject: {message.subject}")
-    print(f"Body:\n{message.body}")
-    print("="*30 + "\n")
-
-# Connect the function to Flask-Mail
-email_dispatched.connect(log_message)

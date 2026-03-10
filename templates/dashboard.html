@@ -9,6 +9,11 @@
         <div class="nav_bar">
         <a href="{{url_for('user.dashboard')}}" class = "active">Dashboard</a>
         <a href="{{url_for('user.history')}}">History</a>
+
+            {% if session.get('admin') %}
+                <a href="{{url_for('user.admin')}}">Admin Dashboard</a>
+            {% endif %}
+
         <a href="{{url_for('auth.logout')}}">Logout</a>
         </div>
 

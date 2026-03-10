@@ -74,3 +74,14 @@ def go_login():
 @user_bp.route('/go_reg', methods = ["POST"])
 def go_reg():
     return redirect(url_for("auth.reg"))
+
+@user_bp.route("/admin")
+def admin():
+    if "user" not in session or not session.get("admin"):
+        return ("user.dashboard")
+    else:
+
+        all_users = users.query.all()
+        all_bills = bills.query.all()
+
+        return render_template("admin.html", all_users = all_users, all_bills = all_bills)
