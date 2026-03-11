@@ -1,4 +1,6 @@
+//Waits for the whole page to load before running the following program
 document.addEventListener("DOMContentLoaded", () => {
+    //Declaring important constants and getting elements from the website pages
     const bill_modal = document.getElementById("bill_modal");
     const close_bill = document.querySelector(".close_bill");
     const modal_bill_name = document.getElementById("modal_bill_name");
@@ -8,14 +10,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal_proofs = document.getElementById("modal_proofs");
     const hidden_delete_bill_id = document.getElementById("hidden_delete_bill_id");
 
+    //Loops through every item in the bill list to make it clickable
     bill_list.forEach(item => {
         item.addEventListener("click", function() {
+            //Declaring more constants by getting element ids
             const billId = this.getAttribute("data_bill_id");
 
+            //Sets the hidden input which will be used for deleting
             if (hidden_delete_bill_id) {
                 hidden_delete_bill_id.value = billId;
             }
             
+            //Fecthes the data of the bill by using the flask python backend
             fetch(`/get_bill/${billId}`)
                 .then(response => response.json())
                 .then(data => {
@@ -24,9 +30,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         return;
                     }
                     
+                    //Puts the data from the DB into the website
                     if (modal_bill_name) modal_bill_name.textContent = data.name;
                     if (modal_bill_amount) modal_bill_amount.textContent = data.amount;
                     
+                    //Creates a list of people who owe money for a bill and adds check marks or an X if they have already paid or not
                     if (modal_recipients) {
                         modal_recipients.innerHTML = ""; 
                         data.recipients.forEach(person => {
@@ -60,20 +68,24 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                     }
 
+                    //Opens the modal whioch holds the details
                     if (bill_modal) bill_modal.style.display = "block";
                 })
+                //If an error occurs the following is outputted
                 .catch(error => {
                     console.error("Error with data", error);
                 });
         });
     });
 
+    //Closes the main modal when the 'X' is clicked
     if (close_bill && bill_modal) {
         close_bill.addEventListener("click", () => {
             bill_modal.style.display = "none";
         });
     }
 
+    //Closes an modal when the background is clicked
     window.addEventListener("click", (event) => {
         if (event.target == bill_modal){
             bill_modal.style.display = "none";

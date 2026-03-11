@@ -317,6 +317,7 @@ def edit_bill():
 #Method to edit a bill again but this method is for the admin page
 @bills_bp.route("/admin_edit_bill", methods=["POST"])
 def admin_edit_bill():
+    #Checks if an admin is logged in rather than a user
     if not session.get("admin"):
         return redirect(url_for("auth.login"))
     
