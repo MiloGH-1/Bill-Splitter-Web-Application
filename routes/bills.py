@@ -161,21 +161,26 @@ def payBill():
     flash("Sucessfully paid bill!", "green")
     return redirect(url_for("user.dashboard"))
 
+
+#Method to delete a bill from the db only if no one has paid yet
 @bills_bp.route("/delete_bill", methods = ["POST"])
 def delete_bill():
+    #Finds the bill id to delete
     bill_id = request.form.get("bill_id")
 
     if bill_id:
+        #Finds the bill in the database
         bill_to_delete = bills.query.get(bill_id)
 
         if bill_to_delete:
             no_payments = True
             query = payments.query.filter_by(bill_id=bill_id).all()
-
+            #Checks if anyone has paid their portion of the payment yet
             for x in query:
                 if x.paid == True:
                     no_payments = False
 
+            #If no one is yet to pay then the payments are found and deleted and the original bill is also deleted
             if no_payments:
                 payments.query.filter_by(bill_id=bill_id).delete()
                 db.session.delete(bill_to_delete)
@@ -185,58 +190,75 @@ def delete_bill():
 
     return redirect(url_for("user.dashboard"))
 
+#Method to delete a saved bill, it is not removed from DB but instead is hidden from the user
 @bills_bp.route("/delete_saved_bill", methods = ["POST"])
 def delete_saved_bill():
+    #Finds the user id of the current user and the bill id of the bill they want to remove
     user_id = session.get("user_id")
     bill_id = request.form.get("bill_id")
 
     if bill_id:
+        #Finds the bill in the DB
         bill = bills.query.filter_by(id=bill_id, user_id=user_id).first()
         if bill:
+            #Sets the hidden attribute to true 
             bill.hidden_by_creator = True
 
+        #Finds the payment from the bill that they owe
         payment = payments.query.filter_by(bill_id=bill_id, user_id=user_id).first()
         if payment:
+            #Sets the hidden attribute to true 
             payment.hidden_by_payer = True
 
         if bill or payment:
+            #Commits the changes
             db.session.commit()
     return redirect(url_for("user.history"))
 
+#Method to remove a bill of the DB no matter what
 @bills_bp.route("/admin_bill_delete", methods = ["POST"])
 def admin_bill_delete():
+    #Checks if the current user is an admin
     if not session.get("admin"):
         return redirect(url_for("user.dashboard"))
     
     else:
+        #Finds the bill id
         bill_id = request.form.get("bill_id")
 
         if bill_id:
             bill_to_delete = bills.query.get(bill_id)
 
             if bill_to_delete:
+                #deletes all the payments associated with the billl and the original bill
                 payments.query.filter_by(bill_id=bill_id).delete()
                 db.session.delete(bill_to_delete)
                 db.session.commit()
                 flash("Bill deleted sucessfully from entire database", "green")
     return redirect(url_for("user.admin"))
 
+#Method to delete an account
 @bills_bp.route("/account_delete", methods = ["POST"])
 def account_delete():
+    #Checks if current user is an admin
     if not session.get("admin"):
         return redirect(url_for("user.dashboard"))
     
     else:
+        #Obtains the ID from the form to know which account needs deleting
         user_id = request.form.get("user_id")
 
         if user_id:
+            #Finds the account to delete
             account_to_delete = users.query.get(user_id)
 
             if account_to_delete and account_to_delete.username != "admin":
+                #Finds all the payments they owe and the bills they have sent
                 payments.query.filter_by(user_id=account_to_delete.id).delete()
 
                 user_bills = bills.query.filter_by(user_id=account_to_delete.id).all()
                 
+                #Deletes all their payments, their bills and their account
                 for b in user_bills:
                     payments.query.filter_by(bill_id=b.id).delete()
 
@@ -250,33 +272,40 @@ def account_delete():
 
     return redirect(url_for("user.admin"))
 
+
+#Method to edit a bill
 @bills_bp.route("/edit_bill", methods=["POST"])
 def edit_bill():
+    #Checks the current user id logged in
     user_id = session.get("user_id")
 
     if not user_id:
         return redirect(url_for("auth.login"))
     
     else:
+        #Obtains new info from a form
         bill_id = request.form.get("bill_id")
         new_name = request.form.get("new_name")
         new_amount = request.form.get("new_amount")
 
         if bill_id and new_name and new_amount:
+            #Finds the bill in the DB that needs to be changed
             bill_to_edit = bills.query.get(bill_id)
 
             if bill_to_edit:
+                #Updates the bill
                 bill_to_edit.name = new_name
                 bill_to_edit.amount = float(new_amount)
                 
-
+                #Finds all the payments with this bill
                 payments_list = payments.query.filter_by(bill_id=bill_id).all()
                 
                 if payments_list:
-
+                    #Calculates new payment amounts
                     amount_pp = float(new_amount) / (len(payments_list) + 1)
                     
                     for x in payments_list:
+                        #Updates the payments
                         x.amount_owed = amount_pp
                         x.name = new_name
                 
@@ -285,6 +314,7 @@ def edit_bill():
 
     return redirect(url_for("user.dashboard"))
 
+#Method to edit a bill again but this method is for the admin page
 @bills_bp.route("/admin_edit_bill", methods=["POST"])
 def admin_edit_bill():
     if not session.get("admin"):
