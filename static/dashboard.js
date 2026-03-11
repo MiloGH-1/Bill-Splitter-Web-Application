@@ -24,6 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal_image = document.getElementById("modal_image")
     const hidden_delete_input = document.getElementById("hidden_delete_bill_id");
     const modal_date = document.getElementById("modal_date")
+    const edit_modal = document.getElementById("edit_modal");
+    const close_edit = document.querySelector(".close_edit");
+    const edit_buttons = document.querySelectorAll(".edit_button");
 
 
 
@@ -109,11 +112,33 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    edit_buttons.forEach(button => {
+        button.addEventListener("click", function(e) {
+            e.stopPropagation(); 
+
+            const bill_Id = this.getAttribute("data_bill_id");
+            const bill_name = this.getAttribute("data_bill_name");
+            const bill_amount = this.getAttribute("data_bill_amount");
+
+            document.getElementById("hidden_edit_bill_id").value = bill_Id;
+            document.getElementById("edit_name").value = bill_name;
+            document.getElementById("edit_amount").value = bill_amount;
+
+            edit_modal.style.display = "block";
+        });
+    });
+
     if(close_bill && bill_modal) {
         close_bill.addEventListener("click", () =>{
             bill_modal.style.display = "none";
         });
     }
+    if (close_edit) {
+        close_edit.addEventListener("click", function() {
+        edit_modal.style.display = "none";
+    });
+}
+    
 
     window.addEventListener("click", (event) => {
         if (add_modal && event.target == add_modal) {
@@ -122,8 +147,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (bill_modal && event.target == bill_modal){
             bill_modal.style.display = "none";
         }
-    })
-});
+        if (event.target == edit_modal) {
+            edit_modal.style.display = "none";
+        }
+        })
+    });
 
 const recipientInput = document.getElementById("recipient");
 if (recipientInput) {

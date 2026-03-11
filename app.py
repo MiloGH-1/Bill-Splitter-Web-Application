@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 app.secret_key = "secretkey"
-app.config["SQLALCHEMY_DATABASE_URI"] = "db:///database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['MAIL_SUPPRESS_SEND'] = True
 app.config['MAIL_DEBUG'] = True

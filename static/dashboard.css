@@ -57,10 +57,23 @@ body {
     color: #0a0b0d;
 }
 
-#add, #pay_bill, #del_bill{
+#add, #pay_bill, #del_bill, #edit_bill, #edit_submit{
+    cursor: pointer;
     margin-top: 20px;
     width: 100%;
     padding: 12px;
+    background-color: #2e3136;
+    color: #fcfdfd;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.edit_button{
+    cursor: pointer;
+    margin-left: 5px;
+    width: 30%;
     background-color: #2e3136;
     color: #fcfdfd;
     border: none;
@@ -125,7 +138,7 @@ body {
   color: #fcfdfd;
 }
 
-.add_modal, #bill_modal{
+.add_modal, #bill_modal, #edit_modal{
     display: none;
     position: fixed;
     z-index: 1;
@@ -137,7 +150,7 @@ body {
     backdrop-filter: blur(3px);
 }
 
-.add_content {
+.add_content, .edit_content {
     background-color: #fcfdfd;
     margin: 15% auto;
     padding: 35px 45px;
@@ -149,7 +162,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-.close, .close_bill {
+.close, .close_bill, .close_edit {
     cursor: pointer;
     float: right;
     font-size: 24px;

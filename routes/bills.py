@@ -66,18 +66,25 @@ def addBill():
 def get_bill(billID):
     bill = bills.query.filter_by(id=billID).first()
 
+    #Arrays to hold important info about the recipients
     recipientsIDs = []
     recipients = []
+
+    #Obtains the payments which came from a bill ID
     usersIds = payments.query.filter_by(bill_id=billID).all()
 
     date = ""
     if bill.created_at:
+        #Creates date for the bill and formats it nicely
         date = bill.created_at.strftime("%B %d, %Y at %I:%M %p")
+    
 
     image_base = None
     if bill.image:
+        #Encodes the image into binary so it can be stored in the DB
         image_base = base64.b64encode(bill.image).decode('utf-8')
 
+    #Loops through all 
     for x in usersIds:
         recipientsIDs.append(x.user_id)
 
@@ -93,16 +100,19 @@ def get_bill(billID):
         proof_base = None
 
         if x.proof_of_payment:
+            #Turns image into binary 
             proof_base = base64.b64encode(x.proof_of_payment).decode('utf-8')
 
         user = users.query.get(x.user_id)
         recipient_paid.append({
+            #Adds to the list the following info to be used in the website:
             'username': user.username,
             'paid': x.paid,
             'proof': proof_base
         })
 
     if bill:
+        #Returns info back to the website about the bill so it can be used
         return jsonify({
             'name': bill.name,
             'amount': bill.amount,
@@ -111,32 +121,43 @@ def get_bill(billID):
             'date': date
         })
     else:
+        #Error message in case bill is unable to be found
         return jsonify({"error": "bill could not be found"}), 404
-    
+
+
+#Method to pay a bill
 @bills_bp.route("/payBill", methods=["POST"])
 def payBill():
+    #Obtains the image and id of the payment to be paid
     pay_image = request.files.get("pay_img")
     payment_id = request.form.get("payment_id")
 
+    #Finds the payment in the DB
     payment = payments.query.filter_by(id=payment_id).first()
 
+    #Find the bill linked to this payment
     bill = bills.query.get(payment.bill_id)
 
     if payment and pay_image.filename != "":
+        #Read the image file obtained from the form
         file = pay_image.read()
         payment.proof_of_payment=file
         payment.type=pay_image.mimetype
 
+        #Set the 'paid' variable to true in the database to highlight its been paid
         payment.paid = True
 
         if bill:
+            #Find who sent the bill and received the bill by matching the foreign key of the user ID between the 'users' and 'bills' table
             sender = users.query.get(bill.user_id)
             payer = users.query.get(payment.user_id)
             if sender and sender.email:
+                #Send an email to the sender to alert them that it has been paid
                 paid_bill_email(sender.email, bill.name, payer.username, payment.amount_owed)
 
         db.session.commit()
 
+    #Flashes a message to alert user of payment
     flash("Sucessfully paid bill!", "green")
     return redirect(url_for("user.dashboard"))
 
@@ -226,5 +247,73 @@ def account_delete():
                 flash("Sucessfully deleted account forever, it is not recoverable", "green")
             else:
                 flash("Cannot delete admin account", "red")
+
+    return redirect(url_for("user.admin"))
+
+@bills_bp.route("/edit_bill", methods=["POST"])
+def edit_bill():
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return redirect(url_for("auth.login"))
+    
+    else:
+        bill_id = request.form.get("bill_id")
+        new_name = request.form.get("new_name")
+        new_amount = request.form.get("new_amount")
+
+        if bill_id and new_name and new_amount:
+            bill_to_edit = bills.query.get(bill_id)
+
+            if bill_to_edit:
+                bill_to_edit.name = new_name
+                bill_to_edit.amount = float(new_amount)
+                
+
+                payments_list = payments.query.filter_by(bill_id=bill_id).all()
+                
+                if payments_list:
+
+                    amount_pp = float(new_amount) / (len(payments_list) + 1)
+                    
+                    for x in payments_list:
+                        x.amount_owed = amount_pp
+                        x.name = new_name
+                
+                db.session.commit()
+                flash("Bill updated successfully!", "green")
+
+    return redirect(url_for("user.dashboard"))
+
+@bills_bp.route("/admin_edit_bill", methods=["POST"])
+def admin_edit_bill():
+    if not session.get("admin"):
+        return redirect(url_for("auth.login"))
+    
+    else:
+        bill_id = request.form.get("bill_id")
+        new_name = request.form.get("new_name")
+        new_amount = request.form.get("new_amount")
+
+        if bill_id and new_name and new_amount:
+            bill_to_edit = bills.query.get(bill_id)
+
+            if bill_to_edit:
+                bill_to_edit.name = new_name
+                bill_to_edit.amount = float(new_amount)
+                
+
+                payments_list = payments.query.filter_by(bill_id=bill_id).all()
+                
+                if payments_list:
+
+                    amount_pp = float(new_amount) / (len(payments_list) + 1)
+                    
+                    for x in payments_list:
+                        x.amount_owed = amount_pp
+                        x.name = new_name
+                
+                db.session.commit()
+                flash("Bill updated successfully!", "green")
 
     return redirect(url_for("user.admin"))

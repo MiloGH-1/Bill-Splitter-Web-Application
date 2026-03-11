@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <title>Admin Dashboard</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
     </head>
     <body>
@@ -57,8 +58,11 @@
 
                             <form action="{{ url_for('bills.admin_bill_delete') }}" method="POST">
                                 <input type="hidden" name="bill_id" value="{{ b.id }}">
-                                <button id ="delete" type="submit">Delete</button>
+                                <button id="admin_delete" type="submit">Delete</button>
                             </form>
+
+                            <button type="button" id = "admin_edit_button" class="edit_button" data_bill_id="{{ b.id }}" data_bill_name="{{ b.name }}" data_bill_amount="{{ b.amount }}">Edit</button>
+                            
                         </li>
                     {% else %}
                         <li>No bills in the system yet.</li>
@@ -80,5 +84,24 @@
                 </ul>
             </div>
         </div>
+
+        <div id="edit_modal" class="add_modal">
+            <div class="add_content">
+                <span class="close_edit">&times;</span>
+                <form id="bill_edit" action="{{ url_for('bills.admin_edit_bill') }}" method="POST">
+                    <h3 style="margin-top: 0;">Edit Bill Details</h3>
+                    <input type="hidden" name="bill_id" id="hidden_edit_bill_id" value="">
+                    
+                    <label for="edit_name">New Title:</label>
+                    <input type="text" id="edit_name" name="new_name" placeholder="Updated Title" required>
+                    
+                    <label for="edit_amount">New Total Amount (£):</label>
+                    <input type="number" id="edit_amount" name="new_amount" step="0.01" min="0.01" placeholder="0.00" required>
+                    
+                    <button id="edit_submit" type="submit">Save Changes</button>
+                </form>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
         </body>
 </html>
