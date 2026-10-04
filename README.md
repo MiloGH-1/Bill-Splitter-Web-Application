@@ -1,14 +1,7 @@
 # README and VIDEO
+Flask and python project which allows users to create a bill and then split this bill between users which have also created an account. 
 
-Before submitting your coursework, run `./clean.sh`. This will remove the virtual environment.  The markers will reconstruct the environment locally.
+Users create an account, log in, and then can view bills they need to pay as well as bills which they have sent to others.
 
-Your project folder when clean *must* not include any virtual environment folder (`/venv` or `/vcwk`) or python cache folder (`/__pycache__`) and must be <100Mb.
-
-Your _project description_ *must* replace the text in this file.  It is expected to be around 500 words long.
-
-Your _video_ *must* replace the `CS139_Coursework.mp4` file in this folder.  It must be no more than 8 minutes long and must be <600Mb.
-
-You can replace the `/` index route and `index.html` template.
-
-Finally, you must zip this whole project folder into a file called `coursework.zip` and submit it to Tabula.  
+To pay a bill they can click on it and then upload proof. At which point it will be taken off their page and added to their history page which will showcase total bills paid as well total bills received.
 **Check your submission!!**
